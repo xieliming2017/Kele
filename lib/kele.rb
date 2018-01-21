@@ -13,7 +13,12 @@ class Kele
 
   def get_me
     response = self.class.get("/users/me", headers: {"authorization" => @auth_token})
-    puts JSON.parse(response.body)
+    my_info = JSON.parse(response.body)
   end
 
+  def get_mentor_availability
+    mentor_id = self.get_me["mentor_id"]
+    response = self.class.get("/mentors/#{mentor_id}/student_availability", headers: {"authorization" => @auth_token})
+    puts JSON.parse(response.body)
+  end
 end
