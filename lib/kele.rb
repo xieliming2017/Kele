@@ -18,7 +18,12 @@ class Kele
     }
 
     response = self.class.post("/sessions", options)
-    @auth_token = response["auth_token"]
+
+    if response.success?
+      @auth_token = response["auth_token"]
+    else
+      raise response.parsed_response['message']
+    end
   end
 
   def get_me
@@ -35,7 +40,7 @@ class Kele
     if page.nil?
       response = self.class.get("/message_threads", headers: {"authorization" => @auth_token})
     else
-      response = self.class.get("/message_threads", headers: {"authorization" => @auth_token})
+      response = self.class.get("/message_threads?page=#{page}", headers: {"authorization" => @auth_token})
     end
     JSON.parse(response.body)
   end
@@ -53,5 +58,17 @@ class Kele
 
   end
 
+  def create_submission(checkpoint_id, assignment_branch, assignment_commit_link, comment, enrollment_id)
+    options = {
+      body: {
+        "checkpoint_id": checkpoint_id,
+        "assignment_branch": assignment_branch,
+        "assignment_commit_link": assignment_commit_link,
+        "comment": comment
+        "enrollment_id": enrollment_id
+      }
+    }
 
+    response = self.class.post("/checkpoint_submissions", options)
+  end
 end
