@@ -79,14 +79,13 @@ class Kele
     options = {
       headers: {"authorization" => @auth_token},
       body: {
-        "id": checkpoint_submission_id,
+        "checkpoint_id": checkpoint_id,
         "assignment_branch": assignment_branch,
         "assignment_commit_link": assignment_commit_link,
-        "checkpoint_id": checkpoint_id,
         "comment": comment,
         "enrollment_id": enrollment_id
       }
 
-      response = self.class.post("/checkpoint_submissions", options)
+      response = self.class.post("/checkpoint_submissions/#{checkpoint_submission_id}", options)
   end
 end
